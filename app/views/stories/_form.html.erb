@@ -1,0 +1,22 @@
+<%= form_for @story, :url => story_path, :html => { :multipart => true } do |f| %>
+  <% if @story.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@story.errors.count, "error") %> prohibited this story from being saved:</h2>
+
+      <ul>
+      <% @story.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <%= f.file_field :image %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
