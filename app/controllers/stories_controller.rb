@@ -24,8 +24,13 @@ class StoriesController < ApplicationController
   # POST /stories
   # POST /stories.json
   def create
+    image = params[:story][:image].tempfile.path
+    system("echo '###Script Running###'")
+    system("sh #{Rails.root}/lib/cartoonify.sh #{image} #{Rails.root}/public/temp.jpg")
+    # @story.image = system("echo #{Rails.root}/public/temp.jpg}")
+    system("mv -f #{Rails.root}/public/temp.jpg #{image}")
     @story = Story.new(story_params)
-
+    puts @story.to_yaml
     respond_to do |format|
       if @story.save
         format.html { redirect_to @story, notice: 'Story was successfully created.' }
@@ -42,6 +47,12 @@ class StoriesController < ApplicationController
   def update
     respond_to do |format|
       if @story.update(story_params)
+        puts "????? Story Params Image ?????"
+        image = params[:story][:image].tempfile.path
+        system("echo '#{image}'")
+        system("sh #{Rails.root}/lib/cartoonify.sh #{image} #{Rails.root}/public/temp.jpg")
+        # system("#{params[:story][:image].tempfile}")
+        system("mv -f #{Rails.root}/public/temp.jpg #{params[:story][:image].tempfile.path}")
         format.html { redirect_to @story, notice: 'Story was successfully updated.' }
         format.json { head :no_content }
       else
